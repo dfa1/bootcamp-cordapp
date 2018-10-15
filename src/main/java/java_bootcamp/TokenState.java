@@ -8,8 +8,8 @@ import net.corda.core.identity.Party;
 import java.util.List;
 
 /* Our state, defining a shared fact on the ledger.
- * See src/main/kotlin/examples/IAmAState.java and
- * src/main/kotlin/examples/IAmAlsoAState.java for examples. */
+ * See src/main/java/examples/IAmAState.java and
+ * src/main/java/examples/IAmAlsoAState.java for examples. */
 public class TokenState {
 
 }
