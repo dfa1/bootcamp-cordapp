@@ -4,7 +4,7 @@ import org.junit.Test;
 
 public class ProjectImportedOKTest {
     @Test
-    public void projectImportedOK() {
+    public void projectImportedOKTest() {
 
     }
 }
