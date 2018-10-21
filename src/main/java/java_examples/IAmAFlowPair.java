@@ -201,12 +201,12 @@ public class IAmAFlowPair {
             ------------------------------------*/
             progressTracker.setCurrentStep(EXTRACTING_VAULT_STATES);
 
-            // Let's assume there are already some ``IAmAlsoAState``s in our
+            // Let's assume there are already some ``IAmAState``s in our
             // node's vault, stored there as a result of running past flows,
             // and we want to consume them in a transaction. There are many
             // ways to extract these states from our vault.
 
-            // For example, we would extract any unconsumed ``IAmAlsoAState``s
+            // For example, we would extract any unconsumed ``IAmAState``s
             // from our vault as follows:
             VaultQueryCriteria criteria = new VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
             Page<IAmAState> results = getServiceHub().getVaultService().queryBy(IAmAState.class, criteria);
@@ -231,9 +231,9 @@ public class IAmAFlowPair {
             progressTracker.setCurrentStep(OTHER_TX_COMPONENTS);
 
             // Output states are constructed from scratch.
-            IAmAlsoAState ourOutputState = new IAmAlsoAState("data", counterparty, new UniqueIdentifier());
+            IAmAState ourOutputState = new IAmAState("data", 3, getOurIdentity(), counterparty);
             // Or as copies of other states with some properties changed.
-            IAmAlsoAState ourOtherOutputState = new IAmAlsoAState("new data", ourOutputState.getPerson(), ourOutputState.getLinearId());
+            IAmAState ourOtherOutputState = new IAmAState("new data", ourOutputState.getSecondAttribute(), ourOutputState.getFirstParty(), ourOutputState.getSecondParty());
 
             // We then need to pair our output state with a contract.
             StateAndContract ourOutput = new StateAndContract(ourOutputState, IAmAContract.CONTRACT_ID);
@@ -241,20 +241,20 @@ public class IAmAFlowPair {
             // Commands pair a ``CommandData`` instance with a list of
             // public keys. To be valid, the transaction requires a signature
             // matching every public key in all of the transaction's commands.
-            IAmAContract.Commands.TypeOnlyCommand commandData = new IAmAContract.Commands.TypeOnlyCommand();
+            IAmAContract.Commands.ACommand commandData = new IAmAContract.Commands.ACommand();
             PublicKey ourPubKey = getServiceHub().getMyInfo().getLegalIdentitiesAndCerts().get(0).getOwningKey();
             PublicKey counterpartyPubKey = counterparty.getOwningKey();
             List<PublicKey> requiredSigners = ImmutableList.of(ourPubKey, counterpartyPubKey);
-            Command<IAmAContract.Commands.TypeOnlyCommand> ourCommand = new Command<>(commandData, requiredSigners);
+            Command<IAmAContract.Commands.ACommand> ourCommand = new Command<>(commandData, requiredSigners);
 
             // ``CommandData`` can either be:
             // 1. Of type ``TypeOnlyCommandData``, in which case it only
             //    serves to attach signers to the transaction and possibly
             //    fork the contract's verification logic.
-            TypeOnlyCommandData typeOnlyCommandData = new IAmAContract.Commands.TypeOnlyCommand();
+            TypeOnlyCommandData typeOnlyCommandData = new IAmAContract.Commands.ACommand();
             // 2. Include additional data which can be used by the contract
             //    during verification, alongside fulfilling the roles above
-            CommandData commandDataWithData = new IAmAContract.Commands.CommandWithData("new data");
+            CommandData commandDataWithData = new IAmAContract.Commands.AnotherCommand("new data");
 
             // Attachments are identified by their hash.
             // The attachment with the corresponding hash must have been
@@ -386,7 +386,7 @@ public class IAmAFlowPair {
             subFlow(new SendStateAndRefFlow(counterpartySession, dummyStates));
 
             // On the receive side ...
-            List<StateAndRef<IAmAlsoAState>> resolvedStateAndRef = subFlow(new ReceiveStateAndRefFlow<IAmAlsoAState>(counterpartySession));
+            List<StateAndRef<IAmAState>> resolvedStateAndRef = subFlow(new ReceiveStateAndRefFlow<IAmAState>(counterpartySession));
 
             try {
 
@@ -407,8 +407,8 @@ public class IAmAFlowPair {
                 LedgerTransaction ledgerTx = twiceSignedTx.toLedgerTransaction(getServiceHub());
 
                 // We can now perform our additional verification.
-                IAmAlsoAState outputState = ledgerTx.outputsOfType(IAmAlsoAState.class).get(0);
-                if (!outputState.getData().equals("new data")) {
+                IAmAState outputState = ledgerTx.outputsOfType(IAmAState.class).get(0);
+                if (!outputState.getFirstAttribute().equals("new data")) {
                     // ``FlowException`` is a special exception type. It will be
                     // propagated back to any counterparty flows waiting for a
                     // message from this flow, notifying them that the flow has
@@ -543,8 +543,8 @@ public class IAmAFlowPair {
                 protected void checkTransaction(SignedTransaction stx) {
                     requireThat(require -> {
                         // Any additional checking we see fit...
-                        IAmAlsoAState outputState = (IAmAlsoAState) stx.getTx().getOutputs().get(0).getData();
-                        assert (outputState.getData().equals("new data"));
+                        IAmAState outputState = (IAmAState) stx.getTx().getOutputs().get(0).getData();
+                        assert (outputState.getFirstAttribute().equals("new data"));
                         return null;
                     });
                 }

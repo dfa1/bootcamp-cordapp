@@ -14,7 +14,7 @@ public class IAmAContract implements Contract {
 
     public interface Commands extends CommandData {
         // A command that is only used to parametrise contract verification.
-        class ACommand implements Commands {
+        class ACommand extends TypeOnlyCommandData implements Commands {
         }
 
         // A command that also contains data to be used during contract verification.
