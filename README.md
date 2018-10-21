@@ -14,7 +14,8 @@ This project contains example state, contract and flow implementations:
 
 * `src/main/java/java_examples/IAmAState`
 * `src/main/java/java_examples/IAmAContract`
-* `src/main/java/java_examples/IAmAFlowPair`
+* `src/main/java/java_examples/IAmAFlowInitiator`
+* `src/main/java/java_examples/IAmAFlowResponder`
 
 There are also several web resources that you will likely find useful for this
 bootcamp:

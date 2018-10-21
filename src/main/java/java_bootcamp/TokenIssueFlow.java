@@ -8,7 +8,7 @@ import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
 
 /* Our flow, automating the process of updating the ledger.
- * See src/main/java/examples/IAmAFlowPair.java for an example. */
+ * See src/main/java/examples/IAmAFlowInitiator.java for an example. */
 @InitiatingFlow
 @StartableByRPC
 public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
