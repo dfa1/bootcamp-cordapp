@@ -34,6 +34,11 @@ public class ArtIssueFlowInitiator extends FlowLogic<Void> {
 
     private final ProgressTracker progressTracker = new ProgressTracker();
 
+    @Override
+    public ProgressTracker getProgressTracker() {
+        return progressTracker;
+    }
+
     // Must be marked `@Suspendable` to allow the flow to be suspended
     // mid-execution.
     @Suspendable

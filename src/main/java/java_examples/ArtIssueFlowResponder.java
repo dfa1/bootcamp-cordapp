@@ -19,6 +19,11 @@ public class ArtIssueFlowResponder extends FlowLogic<Void> {
 
     private final ProgressTracker progressTracker = new ProgressTracker();
 
+    @Override
+    public ProgressTracker getProgressTracker() {
+        return progressTracker;
+    }
+
     @Suspendable
     @Override
     public Void call() throws FlowException {
