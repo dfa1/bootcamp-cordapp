@@ -209,8 +209,8 @@ public class IAmAFlowPair {
             // For example, we would extract any unconsumed ``IAmAlsoAState``s
             // from our vault as follows:
             VaultQueryCriteria criteria = new VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
-            Page<IAmAlsoAState> results = getServiceHub().getVaultService().queryBy(IAmAlsoAState.class, criteria);
-            List<StateAndRef<IAmAlsoAState>> dummyStates = results.getStates();
+            Page<IAmAState> results = getServiceHub().getVaultService().queryBy(IAmAState.class, criteria);
+            List<StateAndRef<IAmAState>> dummyStates = results.getStates();
 
             // For a full list of the available ways of extracting states from
             // the vault, see the Vault Query docs page.

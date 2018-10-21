@@ -13,7 +13,6 @@ when it passes both sets of tests defined in `src/test/java/java_bootcamp`.
 This project contains example state, contract and flow implementations:
 
 * `src/main/java/java_examples/IAmAState`
-* `src/main/java/java_examples/IAmAlsoAState`
 * `src/main/java/java_examples/IAmAContract`
 * `src/main/java/java_examples/IAmAFlowPair`
 
