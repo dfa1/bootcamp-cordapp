@@ -33,8 +33,8 @@ public class ArtIssueFlowResponder extends FlowLogic<Void> {
             // As part of `SignTransactionFlow`, the contracts of the
             // transaction's input and output states are run automatically.
             // Inside `checkTransaction`, we define our own additional logic
-            // for checking the received transaction. If
-            // `checkTransaction` throws an exception, we'll refuse to sign.
+            // for checking the received transaction. If `checkTransaction`
+            // throws an exception, we'll refuse to sign.
             @Override
             protected void checkTransaction(SignedTransaction stx) throws FlowException {
                 // Whatever checking you want to do...

@@ -17,6 +17,7 @@ import java.util.List;
 @InitiatingFlow
 // `StartableByRPC` means that a node operator can start the flow via RPC.
 @StartableByRPC
+// Like all states, implements `FlowLogic`.
 public class ArtIssueFlowInitiator extends FlowLogic<Void> {
     private final String title;
     private final String artist;
@@ -33,14 +34,17 @@ public class ArtIssueFlowInitiator extends FlowLogic<Void> {
 
     private final ProgressTracker progressTracker = new ProgressTracker();
 
+    // Must be marked `@Suspendable` to allow the flow to be suspended
+    // mid-execution.
     @Suspendable
     @Override
+    // Overrides `call`, where we define the logic executed by the flow.
     public Void call() throws FlowException {
         if (!(getOurIdentity().equals(appraiser)))
             throw new IllegalStateException("This flow must be started by the appraiser.");
 
         // We pick an arbitrary notary from the network map. In practice,
-        // it is always preferable to specify the notary to use explicitly.
+        // it is always preferable to explicitly specify the notary to use.
         Party notary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
 
         // We build a transaction using a `TransactionBuilder`.
@@ -51,7 +55,8 @@ public class ArtIssueFlowInitiator extends FlowLogic<Void> {
         txBuilder.setNotary(notary);
 
         // We add the new ArtState to the transaction.
-        // Note that we also specify which contract class to use for verification.
+        // Note that we also specify which contract class to use for
+        // verification.
         ArtState ourOutputState = new ArtState(artist, title, appraiser, owner);
         txBuilder.addOutputState(ourOutputState, ArtContract.ID);
 

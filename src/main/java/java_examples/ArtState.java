@@ -24,7 +24,7 @@ public class ArtState implements ContractState {
         this.owner = owner;
     }
 
-    // Overrides participants, the only field defined by ContractState.
+    // Overrides `participants`, the only field defined by `ContractState`.
     // Defines which parties will store the state.
     @NotNull
     @Override
