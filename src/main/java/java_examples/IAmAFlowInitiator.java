@@ -50,9 +50,6 @@ public class IAmAFlowInitiator extends FlowLogic<Void> {
     @Suspendable
     @Override
     public Void call() throws FlowException {
-        // We'll be using a dummy public key for demonstration purposes.
-        PublicKey dummyPubKey = generateKeyPair().getPublic();
-
         /*---------------------------
          * IDENTIFYING OTHER NODES *
         ---------------------------*/
@@ -60,7 +57,7 @@ public class IAmAFlowInitiator extends FlowLogic<Void> {
         //   - To prevent double-spends if the transaction has inputs
         //   - To serve as a timestamping authority if the transaction has a
         //     time-window
-        // We retrieve a notary from the network map.
+        // We retrieve a notary using the network map.
         CordaX500Name notaryName = new CordaX500Name("Notary Service", "London", "GB");
         Party specificNotary = getServiceHub().getNetworkMapCache().getNotary(notaryName);
         // Alternatively, we can pick an arbitrary notary from the notary
@@ -69,11 +66,10 @@ public class IAmAFlowInitiator extends FlowLogic<Void> {
         // introduced, or old ones decommissioned.
         Party firstNotary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
 
-        // We may also need to identify a specific counterparty. We do so
-        // using the identity service.
-        CordaX500Name counterPartyName = new CordaX500Name("NodeA", "London", "GB");
-        Party namedCounterparty = getServiceHub().getIdentityService().wellKnownPartyFromX500Name(counterPartyName);
-        Party keyedCounterparty = getServiceHub().getIdentityService().partyFromKey(dummyPubKey);
+        // We may also need to retrieve specific counterparties from the
+        // network map.
+        CordaX500Name counterpartyName = new CordaX500Name("NodeA", "London", "GB");
+        Party namedCounterparty = getServiceHub().getNetworkMapCache().getPeerByLegalName(counterpartyName);
 
         /*--------------------------
          * BUILDING A TRANSACTION *
@@ -190,7 +186,7 @@ public class IAmAFlowInitiator extends FlowLogic<Void> {
         // By invoking `FinalityFlow`, we notarise the transaction and get it
         // recorded in the vault of the all the `participants` of all the
         // transaction's states.
-        SignedTransaction notarisedTx1 = subFlow(new FinalityFlow(fullySignedTx));
+        SignedTransaction notarisedTx = subFlow(new FinalityFlow(fullySignedTx));
 
         return null;
     }
