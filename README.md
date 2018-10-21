@@ -12,10 +12,10 @@ when it passes both sets of tests defined in `src/test/java/java_bootcamp`.
 
 This project contains example state, contract and flow implementations:
 
-* `src/main/java/java_examples/IAmAState`
-* `src/main/java/java_examples/IAmAContract`
-* `src/main/java/java_examples/IAmAFlowInitiator`
-* `src/main/java/java_examples/IAmAFlowResponder`
+* `src/main/java/java_examples/ArtState`
+* `src/main/java/java_examples/ArtContract`
+* `src/main/java/java_examples/ArtIssueFlowInitiator`
+* `src/main/java/java_examples/ArtIssueFlowResponder`
 
 There are also several web resources that you will likely find useful for this
 bootcamp:
