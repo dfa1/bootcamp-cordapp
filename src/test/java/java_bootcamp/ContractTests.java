@@ -102,7 +102,7 @@ public class ContractTests {
 
 //    @Test
 //    public void tokenContractRequiresTheTransactionsOutputToHaveAPositiveAmount() {
-//        TokenState zeroTokenState = new TokenState(alice.getParty(), bob.getParty(), -1);
+//        TokenState zeroTokenState = new TokenState(alice.getParty(), bob.getParty(), 0);
 //        TokenState negativeTokenState = new TokenState(alice.getParty(), bob.getParty(), -1);
 //        TokenState positiveTokenState = new TokenState(alice.getParty(), bob.getParty(), 2);
 //
