@@ -14,8 +14,8 @@ This project contains example state, contract and flow implementations:
 
 * `src/main/java/java_examples/ArtState`
 * `src/main/java/java_examples/ArtContract`
-* `src/main/java/java_examples/ArtIssueFlowInitiator`
-* `src/main/java/java_examples/ArtIssueFlowResponder`
+* `src/main/java/java_examples/ArtTransferFlowInitiator`
+* `src/main/java/java_examples/ArtTransferFlowResponder`
 
 There are also several web resources that you will likely find useful for this
 bootcamp:

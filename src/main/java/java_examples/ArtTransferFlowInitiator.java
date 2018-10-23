@@ -3,6 +3,7 @@ package java_examples;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import net.corda.core.contracts.StateAndRef;
 import net.corda.core.flows.*;
 import net.corda.core.identity.Party;
 import net.corda.core.transactions.SignedTransaction;
@@ -11,6 +12,10 @@ import net.corda.core.utilities.ProgressTracker;
 
 import java.security.PublicKey;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.google.common.collect.Iterables.find;
 
 // `InitiatingFlow` means that we can start the flow directly (instead of
 // solely in response to another flow).
@@ -18,18 +23,16 @@ import java.util.List;
 // `StartableByRPC` means that a node operator can start the flow via RPC.
 @StartableByRPC
 // Like all states, implements `FlowLogic`.
-public class ArtIssueFlowInitiator extends FlowLogic<Void> {
+public class ArtTransferFlowInitiator extends FlowLogic<Void> {
     private final String title;
     private final String artist;
-    private final Party appraiser;
-    private final Party owner;
+    private final Party newOwner;
 
     // Flows can take constructor arguments to parameterize the execution of the flow.
-    public ArtIssueFlowInitiator(String title, String artist, Party appraiser, Party owner) {
+    public ArtTransferFlowInitiator(String title, String artist, Party newOwner) {
         this.title = title;
         this.artist = artist;
-        this.appraiser = appraiser;
-        this.owner = owner;
+        this.newOwner = newOwner;
     }
 
     private final ProgressTracker progressTracker = new ProgressTracker();
@@ -45,12 +48,23 @@ public class ArtIssueFlowInitiator extends FlowLogic<Void> {
     @Override
     // Overrides `call`, where we define the logic executed by the flow.
     public Void call() throws FlowException {
-        if (!(getOurIdentity().equals(appraiser)))
-            throw new IllegalStateException("This flow must be started by the appraiser.");
+        // We extract all the `ArtState`s from the vault.
+        List<StateAndRef<ArtState>> artStateAndRefs = getServiceHub().getVaultService().queryBy(ArtState.class).getStates();
 
-        // We pick an arbitrary notary from the network map. In practice,
-        // it is always preferable to explicitly specify the notary to use.
-        Party notary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
+        // We find the `ArtState` with the correct artist and title.
+        StateAndRef<ArtState> inputArtStateAndRef = artStateAndRefs
+                .stream().filter(artStateAndRef -> {
+                    ArtState artState = artStateAndRef.getState().getData();
+                    return artState.getArtist().equals(artist) && artState.getTitle().equals(title);
+                }).findAny().orElseThrow(() -> new IllegalArgumentException("The piece of art was not found."));
+        ArtState inputArtState = inputArtStateAndRef.getState().getData();
+
+        // We throw an exception if the flow was not started by the art's current owner.
+        if (!(getOurIdentity().equals(inputArtState.getOwner())))
+            throw new IllegalStateException("This flow must be started by the current owner.");
+
+        // We use the notary used by the input state.
+        Party notary = inputArtStateAndRef.getState().getNotary();
 
         // We build a transaction using a `TransactionBuilder`.
         TransactionBuilder txBuilder = new TransactionBuilder();
@@ -59,16 +73,23 @@ public class ArtIssueFlowInitiator extends FlowLogic<Void> {
         // notary it will use.
         txBuilder.setNotary(notary);
 
-        // We add the new ArtState to the transaction.
-        // Note that we also specify which contract class to use for
-        // verification.
-        ArtState ourOutputState = new ArtState(artist, title, appraiser, owner);
-        txBuilder.addOutputState(ourOutputState, ArtContract.ID);
+        // We add the input ArtState to the transaction.
+        txBuilder.addInputState(inputArtStateAndRef);
+
+        // We add the output ArtState to the transaction. Note that we also
+        // specify which contract class to use for verification.
+        ArtState outputArtState = new ArtState(
+                inputArtState.getArtist(),
+                inputArtState.getTitle(),
+                inputArtState.getAppraiser(),
+                newOwner);
+        txBuilder.addOutputState(outputArtState, ArtContract.ID);
 
         // We add the Issue command to the transaction.
         // Note that we also specific who is required to sign the transaction.
-        ArtContract.Commands.Issue commandData = new ArtContract.Commands.Issue();
-        List<PublicKey> requiredSigners = ImmutableList.of(appraiser.getOwningKey(), owner.getOwningKey());
+        ArtContract.Commands.Transfer commandData = new ArtContract.Commands.Transfer();
+        List<PublicKey> requiredSigners = ImmutableList.of(
+                inputArtState.getOwner().getOwningKey(), newOwner.getOwningKey());
         txBuilder.addCommand(commandData, requiredSigners);
 
         // We check that the transaction builder we've created meets the
@@ -82,8 +103,9 @@ public class ArtIssueFlowInitiator extends FlowLogic<Void> {
         // We use `CollectSignaturesFlow` to automatically gather a
         // signature from each counterparty. The counterparty will need to
         // call `SignTransactionFlow` to decided whether or not to sign.
-        FlowSession ownerSession = initiateFlow(owner);
-        SignedTransaction fullySignedTx = subFlow(new CollectSignaturesFlow(partlySignedTx, ImmutableSet.of(ownerSession)));
+        FlowSession ownerSession = initiateFlow(newOwner);
+        SignedTransaction fullySignedTx = subFlow(
+                new CollectSignaturesFlow(partlySignedTx, ImmutableSet.of(ownerSession)));
 
         // We use `FinalityFlow` to automatically notarise the transaction
         // and have it recorded by all the `participants` of all the
