@@ -6,14 +6,14 @@ import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.utilities.ProgressTracker;
 
 // `InitiatedBy` means that we will start this flow in response to a
-// message from `ArtIssueFlow.Initiator`.
-@InitiatedBy(ArtIssueFlowInitiator.class)
-public class ArtIssueFlowResponder extends FlowLogic<Void> {
+// message from `ArtTransferFlow.Initiator`.
+@InitiatedBy(ArtTransferFlowInitiator.class)
+public class ArtTransferFlowResponder extends FlowLogic<Void> {
     private final FlowSession counterpartySession;
 
     // Responder flows always have a single constructor argument - a
     // `FlowSession` with the counterparty who initiated the flow.
-    public ArtIssueFlowResponder(FlowSession counterpartySession) {
+    public ArtTransferFlowResponder(FlowSession counterpartySession) {
         this.counterpartySession = counterpartySession;
     }
 

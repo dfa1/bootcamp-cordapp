@@ -165,7 +165,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Issuer is not a required signer, will fail.
 //            tx.output(TokenContract.ID, tokenState);
-//            tx.command(bob.getPublicKey(), new TokenContract.Issue());
+//            tx.command(bob.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.fails();
 //            return null;
 //        });
@@ -173,7 +173,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Issuer is also not a required signer, will fail.
 //            tx.output(TokenContract.ID, tokenStateWhereBobIsIssuer);
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.fails();
 //            return null;
 //        });
@@ -181,7 +181,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Issuer is a required signer, will verify.
 //            tx.output(TokenContract.ID, tokenState);
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.verifies();
 //            return null;
 //        });
@@ -189,7 +189,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Issuer is also a required signer, will verify.
 //            tx.output(TokenContract.ID, tokenStateWhereBobIsIssuer);
-//            tx.command(bob.getPublicKey(), new TokenContract.Issue());
+//            tx.command(bob.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.verifies();
 //            return null;
 //        });

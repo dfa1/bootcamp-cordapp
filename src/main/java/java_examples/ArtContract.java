@@ -24,26 +24,7 @@ public class ArtContract implements Contract {
         CommandWithParties<Commands> command = requireSingleCommand(tx.getCommands(), Commands.class);
 
         if (command.getValue() instanceof Commands.Issue) {
-            // Checking the shape of the transaction.
-            if (tx.getInputStates().size() != 0) throw new IllegalArgumentException("Art issuance should have no inputs.");
-            if (tx.getOutputStates().size() != 1) throw new IllegalArgumentException("Art issuance should have one output.");
-            if (tx.outputsOfType(ArtState.class).size() != 1) throw new IllegalArgumentException("Art issuance output should be an ArtState.");
-
-            // Grabbing the transaction's contents.
-            final ArtState artStateOutput = tx.outputsOfType(ArtState.class).get(0);
-
-            // Checking the transaction's contents.
-            if (artStateOutput.getArtist().length() == 0)
-                throw new IllegalArgumentException("Art issuance output should not have a zero-length artist name.");
-            if (artStateOutput.getTitle().length() == 0)
-                throw new IllegalArgumentException("Art issuance output should not have a zero-length title.");
-
-            // Checking the transaction's required signers.
-            final List<PublicKey> requiredSigners = command.getSigners();
-            if (!(requiredSigners.contains(artStateOutput.getAppraiser().getOwningKey())))
-                 throw new IllegalArgumentException("Art issuance should have output's appraiser as a required signer.");
-            if (!(requiredSigners.contains(artStateOutput.getOwner().getOwningKey())))
-                throw new IllegalArgumentException("Art issuance should have output's owner as a required signer.");
+            // Issue transaction rules...
 
         } else if (command.getValue() instanceof Commands.Transfer) {
             // Checking the shape of the transaction.
@@ -74,22 +55,7 @@ public class ArtContract implements Contract {
                 throw new IllegalArgumentException("Art transfer should have output's owner as a required signer.");
 
         } else if (command.getValue() instanceof Commands.Exit) {
-            // Checking the shape of the transaction.
-            if (tx.getInputStates().size() != 1) throw new IllegalArgumentException("Art exit should have one input.");
-            if (tx.getOutputStates().size() != 0) throw new IllegalArgumentException("Art exit should have no outputs.");
-            if (tx.inputsOfType(ArtState.class).size() != 1) throw new IllegalArgumentException("Art exit input should be an ArtState.");
-
-            // Grabbing the transaction's contents.
-            final ArtState artStateInput = tx.inputsOfType(ArtState.class).get(0);
-
-            // No checking of the transaction's contents required.
-
-            // Checking the transaction's required signers.
-            final List<PublicKey> requiredSigners = command.getSigners();
-            if (!(requiredSigners.contains(artStateInput.getAppraiser().getOwningKey())))
-                throw new IllegalArgumentException("Art exit should have input's appraiser as a required signer.");
-            if (!(requiredSigners.contains(artStateInput.getOwner().getOwningKey())))
-                throw new IllegalArgumentException("Art exit should have input's owner as a required signer.");
+            // Exit transaction rules...
 
         } else throw new IllegalArgumentException("Unrecognised command.");
     }

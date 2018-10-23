@@ -13,5 +13,7 @@ import static net.corda.core.contracts.ContractsDSL.requireThat;
 public class TokenContract {
     public static String ID = "java_bootcamp.TokenContract";
 
-    public static class Issue implements CommandData {}
+    public interface Commands extends CommandData {
+        class Issue implements Commands { }
+    }
 }
