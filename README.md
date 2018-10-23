@@ -2,11 +2,29 @@
 
 # Bootcamp CorDapp
 
-This project is the template we will use to define a complete CorDapp during 
-today's bootcamp. Our CorDapp will allow a token to be issued onto the ledger.
+This project is the template we will use as a basis for developing a complete CorDapp 
+during today's bootcamp. Our CorDapp will allow the issuance of tokens onto the ledger.
 
-We'll take a test-driven approach. You'll know your CorDapp is working 
-when it passes both sets of tests defined in `src/test/java/java_bootcamp`.
+We'll develop the CorDapp using a test-driven approach. At each stage, you'll know your 
+CorDapp is working once it passes both sets of tests defined in `src/test/java/java_bootcamp`.
+
+## Set up
+
+1. Download and install Oracle JDK 8 JVM (minimum supported version 8u131)
+2. Download and install IntelliJ Community Edition (supported versions 2017.x and 2018.x)
+3. Download the bootcamp-cordapp repository:
+
+       git clone https://github.com/corda/bootcamp-cordapp
+       
+4. Open IntelliJ. From the splash screen, click `Import Project`, select the `bootcamp—
+cordapp` folder and click `Open`
+5. Select `Import project from external model > Gradle > Next > Finish`
+6. Click `File > Project Structure…` and select the Project SDK (Oracle JDK 8, 8u131+)
+
+    i. Add a new SDK if required by clicking `New…` and selecting the JDK’s folder
+
+7. Open the `Project` view by clicking `View > Tool Windows > Project`
+8. Run the test in `src/test/java/java_bootcamp/ProjectImportedOKTest.java`. It should pass!
 
 ## Links to useful resources
 
