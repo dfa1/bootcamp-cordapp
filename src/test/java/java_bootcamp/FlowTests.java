@@ -81,7 +81,7 @@ public class FlowTests {
 //        assertEquals(1, signedTransaction.getTx().getCommands().size());
 //        Command command = signedTransaction.getTx().getCommands().get(0);
 //
-//        assert(command.getValue() instanceof TokenContract.Issue);
+//        assert(command.getValue() instanceof TokenContract.Commands.Issue);
 //    }
 
 //    @Test

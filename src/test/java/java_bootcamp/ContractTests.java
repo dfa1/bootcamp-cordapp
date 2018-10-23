@@ -27,7 +27,7 @@ public class ContractTests {
 //            // Has an input, will fail.
 //            tx.input(TokenContract.ID, tokenState);
 //            tx.output(TokenContract.ID, tokenState);
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.fails();
 //            return null;
 //        });
@@ -35,7 +35,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Has no input, will verify.
 //            tx.output(TokenContract.ID, tokenState);
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.verifies();
 //            return null;
 //        });
@@ -47,7 +47,7 @@ public class ContractTests {
 //            // Has two outputs, will fail.
 //            tx.output(TokenContract.ID, tokenState);
 //            tx.output(TokenContract.ID, tokenState);
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.fails();
 //            return null;
 //        });
@@ -55,7 +55,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Has one output, will verify.
 //            tx.output(TokenContract.ID, tokenState);
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.verifies();
 //            return null;
 //        });
@@ -66,8 +66,8 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            tx.output(TokenContract.ID, tokenState);
 //            // Has two commands, will fail.
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.fails();
 //            return null;
 //        });
@@ -75,7 +75,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            tx.output(TokenContract.ID, tokenState);
 //            // Has one command, will verify.
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.verifies();
 //            return null;
 //        });
@@ -86,7 +86,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Has wrong output type, will fail.
 //            tx.output(TokenContract.ID, new DummyState());
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.fails();
 //            return null;
 //        });
@@ -94,7 +94,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Has correct output type, will verify.
 //            tx.output(TokenContract.ID, tokenState);
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.verifies();
 //            return null;
 //        });
@@ -109,7 +109,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Has zero-amount TokenState, will fail.
 //            tx.output(TokenContract.ID, zeroTokenState);
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.fails();
 //            return null;
 //        });
@@ -117,7 +117,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Has negative-amount TokenState, will fail.
 //            tx.output(TokenContract.ID, negativeTokenState);
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.fails();
 //            return null;
 //        });
@@ -125,7 +125,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Has positive-amount TokenState, will verify.
 //            tx.output(TokenContract.ID, tokenState);
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.verifies();
 //            return null;
 //        });
@@ -133,7 +133,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Also has positive-amount TokenState, will verify.
 //            tx.output(TokenContract.ID, positiveTokenState);
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.verifies();
 //            return null;
 //        });
@@ -152,7 +152,7 @@ public class ContractTests {
 //        transaction(ledgerServices, tx -> {
 //            // Has correct command type, will verify.
 //            tx.output(TokenContract.ID, tokenState);
-//            tx.command(alice.getPublicKey(), new TokenContract.Issue());
+//            tx.command(alice.getPublicKey(), new TokenContract.Commands.Issue());
 //            tx.verifies();
 //            return null;
 //        });
