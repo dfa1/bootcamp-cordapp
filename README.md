@@ -148,8 +148,8 @@ Once you've finished the CorDapp's code, run it with the following steps:
 * Build a test network of nodes by opening a terminal window at the root of
   your project and running the following command:
 
-    * Windows:   `gradlew.bat deployNodesJava -Poffline=true`
-    * macOS:     `./gradlew deployNodesJava -Poffline=true`
+    * Windows:   `gradlew.bat deployNodesJava`
+    * macOS:     `./gradlew deployNodesJava`
 
 * Start the nodes by running the following command:
 
@@ -161,7 +161,7 @@ Once you've finished the CorDapp's code, run it with the following steps:
 
     `flow start TokenIssueFlow owner: PartyB, amount: 99`
 
-* You can now see the tokens in both nodes' vaults by running the following
-  command in their respective terminals:
+* You can now see the tokens in the vaults of Party A and Party B (but not 
+  Party C!) by running the following command in their respective terminals:
 
     `run vaultQuery contractStateType: java_bootcamp.TokenState`
